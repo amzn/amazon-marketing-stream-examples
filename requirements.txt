@@ -1,0 +1,9 @@
+aws-cdk-lib>=2.45
+aws-cdk.aws-kinesisfirehose-alpha
+aws-cdk.aws-kinesisfirehose-destinations-alpha
+boto3>=1.24
+constructs>=10.0.0,<11.0.0
+pyyaml
+python-amazon-ad-api>=0.3.7
+requests
+typer[all]

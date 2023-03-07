@@ -1,0 +1,11 @@
+# build system
+/.venv
+/cdk.out
+amz_stream_infra/__pycache__/
+amz_stream_cli/__pycache__/
+tests/__pycache__/
+tests/unit/__pycache__/
+
+# jetbrains
+/.idea
+/*.iml

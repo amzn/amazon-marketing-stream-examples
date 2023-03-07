@@ -1,0 +1,48 @@
+# Amazon Marketing Stream Configuration File
+
+ambassadors:
+  reviewerArn: arn:aws:iam::926844853897:role/ReviewerRole
+
+datasets:
+  NA:
+    - dataSetId: sp-traffic
+      snsSourceArn: arn:aws:sns:us-east-1:906013806264:*
+
+    - dataSetId: sp-conversion
+      snsSourceArn: arn:aws:sns:us-east-1:802324068763:*
+
+    - dataSetId: budget-usage
+      snsSourceArn: arn:aws:sns:us-east-1:055588217351:*
+
+    - dataSetId: sd-traffic
+      snsSourceArn: arn:aws:sns:us-east-1:370941301809:*
+
+    - dataSetId: sd-conversion
+      snsSourceArn: arn:aws:sns:us-east-1:877712924581:*
+
+  EU:
+    - dataSetId: sp-traffic
+      snsSourceArn: arn:aws:sns:eu-west-1:668473351658:*
+
+    - dataSetId: sp-conversion
+      snsSourceArn: arn:aws:sns:eu-west-1:562877083794:*
+
+    - dataSetId: budget-usage
+      snsSourceArn: arn:aws:sns:eu-west-1:675750596317:*
+
+  FE:
+    - dataSetId: sp-traffic
+      snsSourceArn: arn:aws:sns:us-west-2:074266271188:*
+
+    - dataSetId: sp-conversion
+      snsSourceArn: arn:aws:sns:us-west-2:622939981599:*
+
+    - dataSetId: budget-usage
+      snsSourceArn: arn:aws:sns:us-west-2:100899330244:*
+
+# This config defines the AWS region where Stream consumer stack will be installed in your AWS account.
+# The selected regions ensure minimal latency in message consumption.
+consumerStackInstallationAwsRegion:
+  NA: us-east-1
+  EU: eu-west-1
+  FE: us-west-2
