@@ -20,6 +20,36 @@ datasets:
     - dataSetId: sd-conversion
       snsSourceArn: arn:aws:sns:us-east-1:877712924581:*
 
+    - dataSetId: sb-traffic
+      snsSourceArn: arn:aws:sns:us-east-1:709476672186:*
+      
+    - dataSetId: sb-conversion
+      snsSourceArn: arn:aws:sns:us-east-1:154357381721:*
+
+    - dataSetId: sb-clickstream
+      snsSourceArn: arn:aws:sns:us-east-1:091028706140:*
+
+    - dataSetId: sb-rich-media
+      snsSourceArn: arn:aws:sns:us-east-1:010312603579:*
+
+    - dataSetId: campaigns
+      snsSourceArn: arn:aws:sns:us-east-1:570159413969:*
+
+    - dataSetId: adgroups
+      snsSourceArn: arn:aws:sns:us-east-1:118846437111:*
+
+    - dataSetId: ads
+      snsSourceArn: arn:aws:sns:us-east-1:305370293182:*
+
+    - dataSetId: targets
+      snsSourceArn: arn:aws:sns:us-east-1:644124924521:*
+
+    - dataSetId: sponsored-ads-campaign-diagnostics-recommendations
+      snsSourceArn: arn:aws:sns:us-east-1:084590724871:*
+
+    - dataSetId: sp-budget-recommendations
+      snsSourceArn: arn:aws:sns:us-east-1:678715897637:*
+
   EU:
     - dataSetId: sp-traffic
       snsSourceArn: arn:aws:sns:eu-west-1:668473351658:*
@@ -29,6 +59,42 @@ datasets:
 
     - dataSetId: budget-usage
       snsSourceArn: arn:aws:sns:eu-west-1:675750596317:*
+
+    - dataSetId: sd-traffic
+      snsSourceArn: arn:aws:sns:us-east-1:947153514089:*
+
+    - dataSetId: sd-conversion
+      snsSourceArn: arn:aws:sns:us-east-1:664093967423:*
+
+    - dataSetId: sb-traffic
+      snsSourceArn: arn:aws:sns:us-east-1:623198756881:*
+      
+    - dataSetId: sb-conversion
+      snsSourceArn: arn:aws:sns:us-east-1:195770945541:*
+
+    - dataSetId: sb-clickstream
+      snsSourceArn: arn:aws:sns:us-east-1:219513501272:*
+
+    - dataSetId: sb-rich-media
+      snsSourceArn: arn:aws:sns:us-east-1:662188760626:*
+
+    - dataSetId: campaigns
+      snsSourceArn: arn:aws:sns:us-east-1:834862128520:*
+
+    - dataSetId: adgroups
+      snsSourceArn: arn:aws:sns:us-east-1:130948361130:*
+
+    - dataSetId: ads
+      snsSourceArn: arn:aws:sns:us-east-1:648558082147:*
+
+    - dataSetId: targets
+      snsSourceArn: arn:aws:sns:us-east-1:503759481754:*
+
+    - dataSetId: sponsored-ads-campaign-diagnostics-recommendations
+      snsSourceArn: arn:aws:sns:us-east-1:059061853903:*
+
+    - dataSetId: sp-budget-recommendations
+      snsSourceArn: arn:aws:sns:us-east-1:158915609581:*
 
   FE:
     - dataSetId: sp-traffic
@@ -40,8 +106,45 @@ datasets:
     - dataSetId: budget-usage
       snsSourceArn: arn:aws:sns:us-west-2:100899330244:*
 
+    - dataSetId: sd-traffic
+      snsSourceArn: arn:aws:sns:us-east-1:310605068565:*
+
+    - dataSetId: sd-conversion
+      snsSourceArn: arn:aws:sns:us-east-1:818973306977:*
+
+    - dataSetId: sb-traffic
+      snsSourceArn: arn:aws:sns:us-east-1:485899199471:*
+      
+    - dataSetId: sb-conversion
+      snsSourceArn: arn:aws:sns:us-east-1:112347756703:*
+
+    - dataSetId: sb-clickstream
+      snsSourceArn: arn:aws:sns:us-east-1:632322331982:*
+
+    - dataSetId: sb-rich-media
+      snsSourceArn: arn:aws:sns:us-east-1:618223300352:*
+
+    - dataSetId: campaigns
+      snsSourceArn: arn:aws:sns:us-east-1:527383333093:*
+
+    - dataSetId: adgroups
+      snsSourceArn: arn:aws:sns:us-east-1:668585072850:*
+
+    - dataSetId: ads
+      snsSourceArn: arn:aws:sns:us-east-1:802070757281:*
+
+    - dataSetId: targets
+      snsSourceArn: arn:aws:sns:us-east-1:248074939493:*
+
+    - dataSetId: sponsored-ads-campaign-diagnostics-recommendations
+      snsSourceArn: arn:aws:sns:us-east-1:489995134625:*
+
+    - dataSetId: sp-budget-recommendations
+      snsSourceArn: arn:aws:sns:us-east-1:007292432803:*
+
 # This config defines the AWS region where Stream consumer stack will be installed in your AWS account.
 # The selected regions ensure minimal latency in message consumption.
+#added datasets 
 consumerStackInstallationAwsRegion:
   NA: us-east-1
   EU: eu-west-1

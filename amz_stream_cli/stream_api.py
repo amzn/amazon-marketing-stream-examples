@@ -41,7 +41,16 @@ class DataSet(str, Enum):
     budget_usage = "budget-usage"
     sd_traffic = "sd-traffic"
     sd_conversion = "sd-conversion"
-
+    sponsored_ads_campaign_diagnostics_recommendations = "sponsored-ads-campaign-diagnostics-recommendations"
+    campaigns = "campaigns"
+    adgroups = "adgroups"
+    ads = "ads"
+    targets = "targets"
+    sb_traffic = "sb-traffic"
+    sb_conversion = "sb-conversion"
+    sb_clickstream = "sb-clickstream"
+    sb_rich_media = "sb-rich-media"
+    sp_budget_recommendations = "sp-budget-recommendations"
 
 class SubscriptionUpdateEntityStatus(str, Enum):
     archived = "ARCHIVED"
@@ -71,4 +80,3 @@ class Stream(Client):
     def _add_additional_cli_headers():
         additional_headers = {'x-amzn-stream-cli-version': __version__}
         return additional_headers
-
