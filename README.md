@@ -31,12 +31,46 @@ This package includes following templates for all available datasets for adverti
 * AmzStream-NA-budget-usage
 * AmzStream-NA-sd-traffic
 * AmzStream-NA-sd-conversion
+* AmzStream-NA-sb-traffic
+* AmzStream-NA-sb-conversion
+* AmzStream-NA-sb-clickstream
+* AmzStream-NA-sb-rich-media
+* AmzStream-NA-campaigns
+* AmzStream-NA-adgroups
+* AmzStream-NA-ads
+* AmzStream-NA-targets
+* AmzStream-NA-sponsored-ads-campaign-diagnostics-recommendations
+* AmzStream-NA-sp-budget-recommendations
 * AmzStream-EU-sp-traffic
 * AmzStream-EU-sp-conversion
 * AmzStream-EU-budget-usage
+* AmzStream-EU-sd-traffic
+* AmzStream-EU-sd-conversion
+* AmzStream-EU-sb-traffic
+* AmzStream-EU-sb-conversion
+* AmzStream-EU-sb-clickstream
+* AmzStream-EU-sb-rich-media
+* AmzStream-EU-campaigns
+* AmzStream-EU-adgroups
+* AmzStream-EU-ads
+* AmzStream-EU-targets
+* AmzStream-EU-sponsored-ads-campaign-diagnostics-recommendations
+* AmzStream-EU-sp-budget-recommendations
 * AmzStream-FE-sp-traffic
 * AmzStream-FE-sp-conversion
 * AmzStream-FE-budget-usage
+* AmzStream-FE-sd-traffic
+* AmzStream-FE-sd-conversion
+* AmzStream-FE-sb-traffic
+* AmzStream-FE-sb-conversion
+* AmzStream-FE-sb-clickstream
+* AmzStream-FE-sb-rich-media
+* AmzStream-FE-campaigns
+* AmzStream-FE-adgroups
+* AmzStream-FE-ads
+* AmzStream-FE-targets
+* AmzStream-FE-sponsored-ads-campaign-diagnostics-recommendations
+* AmzStream-FE-sp-budget-recommendations
   
 ## Development prerequisites
 
@@ -124,6 +158,7 @@ We recommend exploring the contents of this project and familiarizing yourself w
 * `cdk deploy`      Deploys this stack to your default AWS account/region
 * `cdk diff`        Compares deployed stack with current state
 * `cdk docs`        Opens CDK documentation
+* `cdk destroy`     Destroys this stack to your default AWS account/region
   
 ## Using the Stream subscription management command line tool <a name="stream-subscription-cli-tool"></a>
 
