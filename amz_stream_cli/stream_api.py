@@ -13,8 +13,7 @@
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-from ad_api.base import ApiResponse, Client, Marketplaces, sp_endpoint, fill_query_params
-from amz_stream_cli import __version__
+from ad_api.base import Marketplaces
 from enum import Enum
 
 
@@ -52,31 +51,6 @@ class DataSet(str, Enum):
     sb_rich_media = "sb-rich-media"
     sp_budget_recommendations = "sp-budget-recommendations"
 
+
 class SubscriptionUpdateEntityStatus(str, Enum):
     archived = "ARCHIVED"
-
-
-class Stream(Client):
-    @sp_endpoint('/streams/subscriptions', method='POST')
-    def create_subscription(self, **kwargs) -> ApiResponse:
-        return self._request(kwargs.pop('path'), data=kwargs.pop('body'), params=kwargs,
-                             headers=self._add_additional_cli_headers())
-
-    @sp_endpoint('/streams/subscriptions/{}', method='PUT')
-    def update_subscription(self, subscription_id, **kwargs) -> ApiResponse:
-        return self._request(fill_query_params(kwargs.pop('path'), subscription_id),
-                             data=kwargs.pop('body'), params=kwargs, headers=self._add_additional_cli_headers())
-
-    @sp_endpoint('/streams/subscriptions/{}', method='GET')
-    def get_subscription(self, subscription_id, **kwargs) -> ApiResponse:
-        return self._request(fill_query_params(kwargs.pop('path'), subscription_id), params=kwargs,
-                             headers=self._add_additional_cli_headers())
-
-    @sp_endpoint('/streams/subscriptions', method='GET')
-    def list_subscriptions(self, **kwargs) -> ApiResponse:
-        return self._request(kwargs.pop('path'), params=kwargs, headers=self._add_additional_cli_headers())
-
-    @staticmethod
-    def _add_additional_cli_headers():
-        additional_headers = {'x-amzn-stream-cli-version': __version__}
-        return additional_headers
