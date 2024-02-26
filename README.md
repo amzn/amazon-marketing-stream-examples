@@ -21,6 +21,10 @@ The application provisions the following AWS infrastructure components for each 
 - An [SNS topic](https://docs.aws.amazon.com/sns/index.html) (StreamFanoutDataTopic that) forwards data through a [KinesisDateFirehouse](https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html) (StreamStorageFirehose) to an [S3 bucket](https://docs.aws.amazon.com/s3/index.html) (StreamStorageBucket) where the data is stored.
 
 Note: The provisioning of each SQS queue also includes an associated [dead-letter queue](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html).
+
+## Video tutorial
+
+Learn how to set up the reference application by watching our [video demo](https://www.youtube.com/embed/_4o6QuTZxxs).
   
 ## Supported datasets
 
