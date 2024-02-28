@@ -263,6 +263,7 @@ class AmzStreamConsumerStack(Stack):
         self.subscription_confirmation.subscribe_to_fanout(self.stream_fanout)
 
         Tags.of(self).add("data_set_id", dataset_config['dataSetId'])
+        Tags.of(self).add("account_id", dataset_config['accountId'])
 
 
 

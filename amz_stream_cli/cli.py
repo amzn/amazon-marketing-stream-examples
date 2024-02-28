@@ -68,7 +68,8 @@ def create_subscription(
     create_subscription_dict = {
         "destinationArn": destination_arn,
         "clientRequestToken": client_request_token,
-        "dataSetId": data_set_id.value
+        "dataSetId": data_set_id.value,
+        "accountId": account.value,
     }
     if notes is not None:
         create_subscription_dict["notes"] = notes
