@@ -13,8 +13,9 @@
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+from ad_api.api import Stream
 from amz_stream_cli import __app_name__, __version__
-from amz_stream_cli.stream_api import AdvertisingApiRegion, Stream, DataSet, SubscriptionUpdateEntityStatus
+from amz_stream_cli.stream_api import AdvertisingApiRegion, DataSet, SubscriptionUpdateEntityStatus
 from rich.console import Console
 from rich.table import Table
 from typing import Optional
