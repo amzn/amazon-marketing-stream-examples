@@ -57,22 +57,24 @@ def _check_for_error_message_from_api(payload: dict) -> None:
              --notes "This is a marketing stream subscription"
              """)
 def create_subscription(
-        api_region: AdvertisingApiRegion = typer.Option(AdvertisingApiRegion.NA, "--api-region", "-a", help="Advertising API region to use. Default is NA."),
+        api_region: AdvertisingApiRegion = typer.Option(AdvertisingApiRegion.NA, "--api-region", "-r", help="Advertising API region to use. Default is NA."),
         destination_arn: str = typer.Option(..., "--destination-arn", "-e", help="AWS ARN of the destination endpoint associated with the subscription. Supported destination types: SQS"),
         client_request_token: str = typer.Option(..., "--client-request-token", "-c", help="Unique value supplied by the caller used to track identical API requests. Should request be re-tried, "
                                                                                       "the caller should supply the same value."),
         notes: str = typer.Option(None, "--notes", "-n", help="Additional details associated with the subscription."),
-        data_set_id: DataSet = typer.Option(..., "--data-set-id", "-d", help="DataSet ID to use for the subscription.")
+        data_set_id: DataSet = typer.Option(..., "--data-set-id", "-d", help="DataSet ID to use for the subscription."),
+        account: str = typer.Option("default", "--account", "-a", help="Amazon Advertising API Account profile.")
 ) -> None:
     create_subscription_dict = {
         "destinationArn": destination_arn,
         "clientRequestToken": client_request_token,
-        "dataSetId": data_set_id.value
+        "dataSetId": data_set_id.value,
+        "accountId": account.value,
     }
     if notes is not None:
         create_subscription_dict["notes"] = notes
 
-    response = Stream(marketplace=AdvertisingApiRegion.get_marketplace(api_region)) \
+    response = Stream(account=account, marketplace=AdvertisingApiRegion.get_marketplace(api_region)) \
         .create_subscription(body=json.dumps(create_subscription_dict))
     _check_for_error_message_from_api(response.payload)
     table = _subscription_to_table(response.payload)
@@ -90,10 +92,11 @@ def create_subscription(
              --notes "Subscription archived from CLI tool" 
              """)
 def update_subscription(
-        api_region: AdvertisingApiRegion = typer.Option(AdvertisingApiRegion.NA, "--api-region", "-a", help="Advertising API region to use. Default is NA."),
+        api_region: AdvertisingApiRegion = typer.Option(AdvertisingApiRegion.NA, "--api-region", "-r", help="Advertising API region to use. Default is NA."),
         subscription_id: str = typer.Option(..., "--subscription-id", "-s", help="Subscription ID of the subscription that will be updated."),
         status: SubscriptionUpdateEntityStatus = typer.Option(..., "--status", "-t", help="Status to use for the subscription."),
         notes: str = typer.Option(None, "--notes", "-n", help="Notes for the subscription update."),
+        account: str = typer.Option("default", "--account", "-a", help="Amazon Advertising API Account profile.")
 ) -> None:
     update_subscription_dict = {
         "status": status.value
@@ -101,7 +104,7 @@ def update_subscription(
     if notes is not None:
         update_subscription_dict["notes"] = notes
 
-    response = Stream(marketplace=AdvertisingApiRegion.get_marketplace(api_region)) \
+    response = Stream(account=account, marketplace=AdvertisingApiRegion.get_marketplace(api_region)) \
         .update_subscription(subscription_id=subscription_id, body=json.dumps(update_subscription_dict))
 
     _check_for_error_message_from_api(response.payload)
@@ -116,10 +119,11 @@ def update_subscription(
              --subscription-id amzn1.fead.xxxx.xxxxxxxxxxxx 
              """)
 def get_subscription(
-        api_region: AdvertisingApiRegion = typer.Option(AdvertisingApiRegion.NA, "--api-region", "-a", help="Advertising API region to use. Default is NA."),
+        api_region: AdvertisingApiRegion = typer.Option(AdvertisingApiRegion.NA, "--api-region", "-r", help="Advertising API region to use. Default is NA."),
         subscription_id: str = typer.Option(..., "--subscription-id", "-s", help="Subscription ID of the subscription to be fetched."),
+        account: str = typer.Option("default", "--account", "-a", help="Amazon Advertising API Account profile."),
 ) -> None:
-    response = Stream(marketplace=AdvertisingApiRegion.get_marketplace(api_region)) \
+    response = Stream(account=account, marketplace=AdvertisingApiRegion.get_marketplace(api_region)) \
         .get_subscription(subscription_id=subscription_id)
     _check_for_error_message_from_api(response.payload)
     subscription = response.payload['subscription']
@@ -134,9 +138,10 @@ def get_subscription(
              python -m amz_stream_cli list \n
              """)
 def list_subscriptions(
-        api_region: AdvertisingApiRegion = typer.Option(AdvertisingApiRegion.NA, "--api-region", "-a", help="Advertising API region to use. Default is NA.")
+        api_region: AdvertisingApiRegion = typer.Option(AdvertisingApiRegion.NA, "--api-region", "-r", help="Advertising API region to use. Default is NA."),
+        account: str = typer.Option("default", "--account", "-a", help="Amazon Advertising API Account profile.")
 ) -> None:
-    response = Stream(marketplace=AdvertisingApiRegion.get_marketplace(api_region)).list_subscriptions()
+    response = Stream(account=account, marketplace=AdvertisingApiRegion.get_marketplace(api_region)).list_subscriptions()
     _check_for_error_message_from_api(response.payload)
     if 'subscriptions' in response.payload:
         subscriptions = sorted(response.payload['subscriptions'], key=lambda d: d['status'])
