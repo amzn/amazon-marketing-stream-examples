@@ -13,9 +13,13 @@
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+import aws_cdk
 from constructs import Construct
+import json
+import os
 from aws_cdk import (
     Environment,
+    Fn as fn,
     Duration,
     Stack,
     Tags,
@@ -67,8 +71,7 @@ class AmzStreamStreamDeliveryInfra(DataSetScopedConstruct):
             {"ArnLike": {"aws:SourceArn": self.dataset_config["snsSourceArn"]}}
         )
         queue.grant_send_messages(stream_delivery_principal)
-
-
+    
 class StreamIngress(DataSetScopedConstruct):
 
     def __init__(self,
@@ -187,7 +190,8 @@ class StreamLanding(DataSetScopedConstruct):
                 )
             ]
         )
-
+        CfnOutput(self, "DeliveryStreamArn", value=self.firehose.delivery_stream_arn, export_name="DeliveryStreamArn")
+       
         self.sns_subscriptions_role = iam.Role(
             self,
             "SnsSubsRole",
@@ -263,6 +267,3 @@ class AmzStreamConsumerStack(Stack):
         self.subscription_confirmation.subscribe_to_fanout(self.stream_fanout)
 
         Tags.of(self).add("data_set_id", dataset_config['dataSetId'])
-
-
-

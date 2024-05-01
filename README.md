@@ -1,19 +1,22 @@
 # Amazon Marketing Stream reference implementation using AWS CDK
 
-This project contains an example implementation and infrastructure code to:
+This project contains an example implementation and infrastructure code to both destinations SQS as well as firehose:
 
-1. Provisions necessary AWS infrastructure to receive and store Amazon Marketing Stream data, as well as confirm Stream dataset subscriptions.
+1. Provisions necessary AWS infrastructure to receive and store Amazon Marketing Stream data, as well as confirm Stream dataset subscriptions for SQS. for Kinesis Data Firehose subscription confirmation is no longer required.
 2. Subscribe to datasets and manage subscriptions using a CLI.
 
 ## Disclaimer
 This is a reference implementation, and not the only definitive way to consume Amazon Marketing Stream data. Note that this implementation is subject to change and future releases may not be backwards compatible.
 
-## Solution architecture
-![Architecture diagram](architecture.png)
+## SQS Solution architecture
+![SQS Architecture diagram](architecture.png)
+
+## Firehose Solution architecture
+![Firehose Architecture diagram](architecture_firehose.png)
 
 This application is developed using Python and AWS Cloud Development Kit (CDK).
 
-The application provisions the following AWS infrastructure components for each dataset and region combination:
+The SQS application deployment provisions the following AWS infrastructure components for each dataset and region combination:
 
 - An [SQS queue](https://docs.aws.amazon.com/sqs/index.html) (StreamIngressQueue) that receives initial messages from Stream.
 - A [lambda](https://docs.aws.amazon.com/lambda/index.html) (StreamFanoutLambda) that identifies whether a message contains subscription details or data.
@@ -22,7 +25,13 @@ The application provisions the following AWS infrastructure components for each 
 
 Note: The provisioning of each SQS queue also includes an associated [dead-letter queue](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html).
 
-## Video tutorial
+The Firehose application deployment provisions the following AWS infrastructure components for each dataset and region combination:
+
+[KinesisDateFirehouse](https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html) (StreamStorageFirehose) to an [S3 bucket](https://docs.aws.amazon.com/s3/index.html) (StreamStorageBucket) where the data is stored.
+[IAM Roles] (https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html) (FirehoseSubscriberRole) and (FirehoseSubscriptionRole) so that amazon marketing stream can send the messages to KinesisDateFirehouse.
+
+
+## Video tutorial For SQS Destination 
 
 Learn how to set up the reference application by watching our [video demo](https://www.youtube.com/embed/_4o6QuTZxxs).
   
@@ -129,24 +138,31 @@ We recommend exploring the contents of this project and familiarizing yourself w
    Depending on your requirements, you can choose to deploy all CloudFormation templates or individual templates.
    
     ```
-    $ cdk deploy --all
+    $ cdk deploy --all (for SQS) or (for Firehose) $ cdk deploy --all --context delivery_type=firehose
     ```
 
     or
 
     ```
-    $ cdk deploy AmzStream-NA-sp-traffic
+    $ cdk deploy AmzStream-NA-sp-traffic (for SQS) or  (for Firehose) $ cdk deploy AmzStream-NA-sp-traffic --context delivery_type=firehose
     ```
 
     At the end of deployment, your output should resemble:  
 
     ```
-    Outputs:
+    SQS Outputs:
     AmzStream-NA-sp-traffic.IngressIngressQueue91B67342 = arn:aws:sqs:us-east-1:2xxxxxxxxxxx:AmzStream-NA-sp-traffic-IngressQueue26236266-Jvxxxxxxxxxx
     AmzStream-NA-sp-traffic.StorageLandingZoneBucketFE2101CB = arn:aws:s3:::amzstream-na-sp-traffic-storagelz10f6c360-1hxxxxxxxxxxx
     Stack ARN:
     arn:aws:cloudformation:us-east-1:2xxxxxxxxxxx:stack/AmzStream-NA-sp-traffic/57151cc0-b625-11ed-a641-12730e200e31
     ```
+  Firehose Outputs:
+    AmzStream-NA-sb-traffic.FirehoseSubscriberRoleInfraArn3358A9BC = arn:aws:iam::886933864370:role/sb-traff-NA-subscriber
+    AmzStream-NA-sb-traffic.FirehoseSubscriptionRoleInfraArn22E3DAAD = arn:aws:iam::886933864370:role/sb-traff-NA-subscription
+    AmzStream-NA-sb-traffic.StorageDeliveryStreamArnBB2306AC = arn:aws:firehose:us-east-1:886933864370:deliverystream/AmzStream-NA-sb-traffic-StorageFirehoseEEA939E5-rDi6fvblOARo
+    AmzStream-NA-sb-traffic.StorageLandingZoneBucketFE2101CB = arn:aws:s3:::amzstream-na-sb-traffic-storagelz10f6c360-4xbrfa1i3lxh
+    Stack ARN:
+    arn:aws:cloudformation:us-east-1:886933864370:stack/AmzStream-NA-sb-traffic/e63f06f0-0790-11ef-b509-127247d88f9b
 
     Note:
     *  This example uses `AmzStream-NA-sp-traffic` as an example.

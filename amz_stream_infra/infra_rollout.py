@@ -16,13 +16,28 @@
 import aws_cdk as cdk
 
 from .stack_definitions import AmzStreamConsumerStack
+from .stack_definitions_firehose import AmzStreamConsumerStackFirehose
 
 
-def rollout_stacks(app: cdk.App, config: dict):
+def rollout_stacks(app: cdk.App, config: dict, delivery_method: str):
     ambassadors_config = config['ambassadors']
     datasets_config = config['datasets']
     installation_region_config = config['consumerStackInstallationAwsRegion']
     for advertising_region in datasets_config:
         for dataset_config in datasets_config[advertising_region]:
-            AmzStreamConsumerStack(app, advertising_region, installation_region_config[advertising_region],
-                                   dataset_config, ambassadors_config)
+            if delivery_method == 'sqs':
+                AmzStreamConsumerStack(
+                    app,
+                    advertising_region,
+                    installation_region_config[advertising_region],
+                    dataset_config,
+                    ambassadors_config
+                )
+            elif delivery_method == 'firehose':
+                AmzStreamConsumerStackFirehose(
+                    app,
+                    advertising_region,
+                    installation_region_config[advertising_region],
+                    dataset_config,
+                    ambassadors_config
+                )
