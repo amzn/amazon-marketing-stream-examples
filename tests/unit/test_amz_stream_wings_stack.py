@@ -17,15 +17,13 @@ import aws_cdk as core
 import aws_cdk.assertions as assertions
 from amz_stream_infra.stack_definitions import AmzStreamConsumerStack
 
-AMBASSADOR_CONFIG = {
-    "reviewerArn": "arn:aws:iam::926844853897:role/ReviewerRole"
-}
+AMBASSADOR_CONFIG = {"reviewerArn": "arn:aws:iam::926844853897:role/ReviewerRole"}
 
 DATASET_CONFIG = {
     "NA": [
         {
             "dataSetId": "sp-traffic",
-            "snsSourceArn": "arn:aws:sns:us-east-1:906013806264:*"
+            "snsSourceArn": "arn:aws:sns:us-east-1:906013806264:*",
         }
     ]
 }
@@ -36,9 +34,7 @@ def test_sqs_queue_created():
     stack = AmzStreamConsumerStack(app, "NA", "us-east-1", DATASET_CONFIG["NA"][0], AMBASSADOR_CONFIG)
     template = assertions.Template.from_stack(stack)
 
-    template.has_resource_properties("AWS::SQS::Queue", {
-        "VisibilityTimeout": 60
-    })
+    template.has_resource_properties("AWS::SQS::Queue", {"VisibilityTimeout": 60})
 
 
 def test_sns_topic_created():

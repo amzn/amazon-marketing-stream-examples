@@ -16,13 +16,39 @@
 import aws_cdk as cdk
 
 from .stack_definitions import AmzStreamConsumerStack
+from .stack_definitions_firehose import AmzStreamConsumerStackFirehose
+
+SUPPORTED_DELIVERY_METHODS = ["sqs", "firehose"]
 
 
-def rollout_stacks(app: cdk.App, config: dict):
-    ambassadors_config = config['ambassadors']
-    datasets_config = config['datasets']
-    installation_region_config = config['consumerStackInstallationAwsRegion']
+def validate_delivery_method(delivery_method: str):
+    if delivery_method not in SUPPORTED_DELIVERY_METHODS:
+        raise ValueError(
+            f"Unsupported delivery method: {delivery_method}. Supported delivery methods are: {
+                ', '.join(SUPPORTED_DELIVERY_METHODS)}"
+        )
+
+
+def rollout_stacks(app: cdk.App, config: dict, delivery_method: str):
+    validate_delivery_method(delivery_method)
+    ambassadors_config = config["ambassadors"]
+    datasets_config = config["datasets"]
+    installation_region_config = config["consumerStackInstallationAwsRegion"]
     for advertising_region in datasets_config:
         for dataset_config in datasets_config[advertising_region]:
-            AmzStreamConsumerStack(app, advertising_region, installation_region_config[advertising_region],
-                                   dataset_config, ambassadors_config)
+            if delivery_method == "sqs":
+                AmzStreamConsumerStack(
+                    app,
+                    advertising_region,
+                    installation_region_config[advertising_region],
+                    dataset_config,
+                    ambassadors_config,
+                )
+            elif delivery_method == "firehose":
+                AmzStreamConsumerStackFirehose(
+                    app,
+                    advertising_region,
+                    installation_region_config[advertising_region],
+                    dataset_config,
+                    ambassadors_config,
+                )

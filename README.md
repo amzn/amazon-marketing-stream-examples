@@ -1,19 +1,24 @@
 # Amazon Marketing Stream reference implementation using AWS CDK
 
-This project contains an example implementation and infrastructure code to:
+This project contains an example implementation and infrastructure code to both destinations SQS as well as firehose:
 
-1. Provisions necessary AWS infrastructure to receive and store Amazon Marketing Stream data, as well as confirm Stream dataset subscriptions.
+1. Provisions necessary AWS infrastructure to receive and store Amazon Marketing Stream data, as well as confirm Stream dataset subscriptions for SQS. The Stream subscription process has been simplified now, with Kinesis Data Firehose, you no longer need to confirm your subscription.
 2. Subscribe to datasets and manage subscriptions using a CLI.
 
 ## Disclaimer
 This is a reference implementation, and not the only definitive way to consume Amazon Marketing Stream data. Note that this implementation is subject to change and future releases may not be backwards compatible.
 
-## Solution architecture
-![Architecture diagram](architecture.png)
+## SQS Solution architecture
+![SQS Architecture diagram](architecture.png)
 
-This application is developed using Python and AWS Cloud Development Kit (CDK).
+## Firehose Solution architecture
+![Firehose Architecture diagram](architecture_firehose.png)
 
-The application provisions the following AWS infrastructure components for each dataset and region combination:
+This application, developed using Python and the AWS Cloud Development Kit (CDK), supports two deployment options: one for SQS and another for the new destination Firehose. However, SQS is the default deployment.
+
+### SQS deployment
+
+The SQS application deployment provisions the following AWS infrastructure components for each dataset and region combination:
 
 - An [SQS queue](https://docs.aws.amazon.com/sqs/index.html) (StreamIngressQueue) that receives initial messages from Stream.
 - A [lambda](https://docs.aws.amazon.com/lambda/index.html) (StreamFanoutLambda) that identifies whether a message contains subscription details or data.
@@ -22,7 +27,15 @@ The application provisions the following AWS infrastructure components for each 
 
 Note: The provisioning of each SQS queue also includes an associated [dead-letter queue](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html).
 
-## Video tutorial
+### Firehose deployment
+The Firehose application deployment provisions the following AWS infrastructure components for each dataset and region combination:
+
+- A [KinesisDateFirehouse](https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html) (StreamStorageFirehose).
+- An [S3 bucket](https://docs.aws.amazon.com/s3/index.html) (StreamStorageBucket) where the data is stored.
+- A [IAM Roles] (https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html) (FirehoseSubscriberRole) and (FirehoseSubscriptionRole) so that amazon marketing stream can send the messages to KinesisDateFirehouse.
+
+
+## Video tutorial For SQS Destination 
 
 Learn how to set up the reference application by watching our [video demo](https://www.youtube.com/embed/_4o6QuTZxxs).
   
@@ -90,14 +103,15 @@ We recommend exploring the contents of this project and familiarizing yourself w
    
     **Manually create a virtualenv on MacOS and Linux**
    
+   Creating a virtual environment
     ```
-    $ python3 -m venv .venv
+    python3 -m venv .venv
     ```
 
     After the init process completes and the virtualenv is created, you can use the following step to activate your virtualenv.
 
     ```
-    $ source .venv/bin/activate
+    source .venv/bin/activate
     ```
 
     **Manually create a virtualenv on Windows**
@@ -109,44 +123,66 @@ We recommend exploring the contents of this project and familiarizing yourself w
 2. Install the required dependencies.
    
     ```
-    $ pip install -r requirements.txt
+    pip install -r requirements.txt
     ```
 
 3. Synthesize the CloudFormation templates for this code.
    
     ```
-    $ cdk synth
+    cdk synth
     ```
 
     To view the CloudFormation templates created by the synthesize step.
 
     ```
-    $ cdk ls
+    cdk ls
     ```
 
 4. Deploy CloudFormation templates.
    
-   Depending on your requirements, you can choose to deploy all CloudFormation templates or individual templates.
+   Depending on your requirements, you can choose to deploy all CloudFormation templates
    
+    SQS -
     ```
-    $ cdk deploy --all
+    cdk deploy --all 
+    ```
+    
+    Firehose - 
+    ```
+    cdk deploy --all --context delivery_type=firehose
     ```
 
-    or
+    or individual templates 
 
+    SQS -
     ```
-    $ cdk deploy AmzStream-NA-sp-traffic
+    cdk deploy AmzStream-NA-sp-traffic 
     ```
-
+    
+    Firehose - 
+    ```
+    cdk deploy AmzStream-NA-sp-traffic --context delivery_type=firehose
+    ```
     At the end of deployment, your output should resemble:  
 
     ```
-    Outputs:
+    SQS Outputs:
     AmzStream-NA-sp-traffic.IngressIngressQueue91B67342 = arn:aws:sqs:us-east-1:2xxxxxxxxxxx:AmzStream-NA-sp-traffic-IngressQueue26236266-Jvxxxxxxxxxx
     AmzStream-NA-sp-traffic.StorageLandingZoneBucketFE2101CB = arn:aws:s3:::amzstream-na-sp-traffic-storagelz10f6c360-1hxxxxxxxxxxx
     Stack ARN:
     arn:aws:cloudformation:us-east-1:2xxxxxxxxxxx:stack/AmzStream-NA-sp-traffic/57151cc0-b625-11ed-a641-12730e200e31
     ```
+    ```
+    Firehose Outputs:
+    AmzStream-NA-sb-traffic.FirehoseSubscriberRoleInfraArn3358A9BC = arn:aws:iam::88xxxxxxxx:role/sb-traff-NA-subscriber
+    AmzStream-NA-sb-traffic.FirehoseSubscriptionRoleInfraArn22E3DAAD = arn:aws:iam::88xxxxxxxx:role/sb-traff-NA-subscription
+    AmzStream-NA-sb-traffic.StorageDeliveryStreamArnBB2306AC = arn:aws:firehose:us-east-1:88xxxxxxxx:deliverystream/AmzStream-NA-sb-traffic-StorageFirehoseEEA939E5-rDi6fvblOARo
+    AmzStream-NA-sb-traffic.StorageLandingZoneBucketFE2101CB = arn:aws:s3:::amzstream-na-sb-traffic-storagelz10f6c360-4xbrfa1i3lxh
+    Stack ARN:
+    arn:aws:cloudformation:us-east-1:88xxxxxxxx:stack/AmzStream-NA-sb-traffic/e63f06f0-0790-11ef-b509-127247d88f9b
+
+    ```
+    
 
     Note:
     *  This example uses `AmzStream-NA-sp-traffic` as an example.

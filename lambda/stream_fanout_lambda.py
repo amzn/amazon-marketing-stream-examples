@@ -23,20 +23,19 @@ def on_route_to_sns(messages_batch, batch_failures, error_handler, destination_t
     batch_to_publish = [
         {
             "Id": str(i),
-            "Message": message["body"] + '\n',
+            "Message": message["body"] + "\n",
         }
         for i, message in enumerate(messages_batch)
     ]
 
     response = aws_clients.sns_client.publish_batch(
-        TopicArn=destination_topic_arn,
-        PublishBatchRequestEntries=batch_to_publish
+        TopicArn=destination_topic_arn, PublishBatchRequestEntries=batch_to_publish
     )
     failures = response.get("Failed", [])
     if failures:
         error_handler(
             f"Partial batch failure from SNS, {len(failures)} failed out of {len(messages_batch)}",
-            json.dumps(failures)
+            json.dumps(failures),
         )
 
     batch_failures.extend([messages_batch[int(failure["Id"])] for failure in failures])
@@ -45,10 +44,7 @@ def on_route_to_sns(messages_batch, batch_failures, error_handler, destination_t
 def on_route_to_sqs(messages_batch, batch_failures, error_handler, destination_queue_url):
     for message in messages_batch:
         try:
-            aws_clients.sqs_client.send_message(
-                QueueUrl=destination_queue_url,
-                MessageBody=message["body"]
-            )
+            aws_clients.sqs_client.send_message(QueueUrl=destination_queue_url, MessageBody=message["body"])
         except Exception as error:
             batch_failures.append(message)
             error_handler(error, json.dumps(message))
@@ -58,12 +54,12 @@ def on_entire_batch(all_messages, batch_failures):
     fanout_config = [
         (
             lambda x: not sqs_lambda.is_subscription_confirmation(x),
-            lambda x, y, z: on_route_to_sns(x, y, z, os.environ["DATA_FANOUT_TOPIC_ARN"])
+            lambda x, y, z: on_route_to_sns(x, y, z, os.environ["DATA_FANOUT_TOPIC_ARN"]),
         ),
         (
             sqs_lambda.is_subscription_confirmation,
-            lambda x, y, z: on_route_to_sqs(x, y, z, os.environ["SUBSCRIPTION_CONFIRMATION_QUEUE_URL"])
-        )
+            lambda x, y, z: on_route_to_sqs(x, y, z, os.environ["SUBSCRIPTION_CONFIRMATION_QUEUE_URL"]),
+        ),
     ]
 
     for messages_filter, batch_callback in fanout_config:
@@ -72,7 +68,7 @@ def on_entire_batch(all_messages, batch_failures):
             messages_filter,
             batch_callback,
             batch_failures,
-            max_batch_size=10
+            max_batch_size=10,
         )
 
 

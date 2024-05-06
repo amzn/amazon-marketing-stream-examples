@@ -2,6 +2,7 @@
 
 ambassadors:
   reviewerArn: arn:aws:iam::926844853897:role/ReviewerRole
+  subscriberRoleArn: arn:aws:iam::926844853897:role/SubscriberRole
 
 datasets:
   NA:

@@ -13,7 +13,7 @@
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+
 def batch_of(data, max_batch_size):
     for i in range(0, len(data), max_batch_size):
-        yield data[i:i + max_batch_size]
-
+        yield data[i : i + max_batch_size]

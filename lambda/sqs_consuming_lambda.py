@@ -40,12 +40,12 @@ def default_batch_error_handler(error, context=None):
 
 
 def process_messages_in_batches(
-        all_messages,
-        messages_filter,
-        batch_callback,
-        batch_failures,
-        max_batch_size,
-        error_handler=default_batch_error_handler,
+    all_messages,
+    messages_filter,
+    batch_callback,
+    batch_failures,
+    max_batch_size,
+    error_handler=default_batch_error_handler,
 ):
     filtered_messages = list(filter(messages_filter, all_messages))
 
@@ -64,7 +64,4 @@ def batch_handler(event, entire_batch_callback):
 
     entire_batch_callback(all_messages, batch_failures)
 
-    return {'batchItemFailures': [as_error_id(i) for i in batch_failures]}
-
-
-
+    return {"batchItemFailures": [as_error_id(i) for i in batch_failures]}
