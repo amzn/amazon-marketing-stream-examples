@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+# Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+
 import yaml
 import aws_cdk as cdk
 from amz_stream_infra import infra_rollout

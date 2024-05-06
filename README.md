@@ -14,7 +14,9 @@ This is a reference implementation, and not the only definitive way to consume A
 ## Firehose Solution architecture
 ![Firehose Architecture diagram](architecture_firehose.png)
 
-This application is developed using Python and AWS Cloud Development Kit (CDK).
+This application, developed using Python and the AWS Cloud Development Kit (CDK), supports two deployment options: one for SQS and another for the new destination Firehose. However, SQS is the default deployment.
+
+### SQS deployment
 
 The SQS application deployment provisions the following AWS infrastructure components for each dataset and region combination:
 
@@ -25,10 +27,12 @@ The SQS application deployment provisions the following AWS infrastructure compo
 
 Note: The provisioning of each SQS queue also includes an associated [dead-letter queue](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html).
 
+### Firehose deployment
 The Firehose application deployment provisions the following AWS infrastructure components for each dataset and region combination:
 
-[KinesisDateFirehouse](https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html) (StreamStorageFirehose) to an [S3 bucket](https://docs.aws.amazon.com/s3/index.html) (StreamStorageBucket) where the data is stored.
-[IAM Roles] (https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html) (FirehoseSubscriberRole) and (FirehoseSubscriptionRole) so that amazon marketing stream can send the messages to KinesisDateFirehouse.
+- A [KinesisDateFirehouse](https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html) (StreamStorageFirehose).
+- An [S3 bucket](https://docs.aws.amazon.com/s3/index.html) (StreamStorageBucket) where the data is stored.
+- A [IAM Roles] (https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html) (FirehoseSubscriberRole) and (FirehoseSubscriptionRole) so that amazon marketing stream can send the messages to KinesisDateFirehouse.
 
 
 ## Video tutorial For SQS Destination 
@@ -138,13 +142,15 @@ We recommend exploring the contents of this project and familiarizing yourself w
    Depending on your requirements, you can choose to deploy all CloudFormation templates or individual templates.
    
     ```
-    $ cdk deploy --all (for SQS) or (for Firehose) $ cdk deploy --all --context delivery_type=firehose
+    SQS - $ cdk deploy --all 
+    Firehose - $ cdk deploy --all --context delivery_type=firehose
     ```
 
     or
 
     ```
-    $ cdk deploy AmzStream-NA-sp-traffic (for SQS) or  (for Firehose) $ cdk deploy AmzStream-NA-sp-traffic --context delivery_type=firehose
+    SQS - $ cdk deploy AmzStream-NA-sp-traffic 
+    Firehose -  $ cdk deploy AmzStream-NA-sp-traffic --context delivery_type=firehose
     ```
 
     At the end of deployment, your output should resemble:  
@@ -156,13 +162,15 @@ We recommend exploring the contents of this project and familiarizing yourself w
     Stack ARN:
     arn:aws:cloudformation:us-east-1:2xxxxxxxxxxx:stack/AmzStream-NA-sp-traffic/57151cc0-b625-11ed-a641-12730e200e31
     ```
-  Firehose Outputs:
-    AmzStream-NA-sb-traffic.FirehoseSubscriberRoleInfraArn3358A9BC = arn:aws:iam::886933864370:role/sb-traff-NA-subscriber
-    AmzStream-NA-sb-traffic.FirehoseSubscriptionRoleInfraArn22E3DAAD = arn:aws:iam::886933864370:role/sb-traff-NA-subscription
-    AmzStream-NA-sb-traffic.StorageDeliveryStreamArnBB2306AC = arn:aws:firehose:us-east-1:886933864370:deliverystream/AmzStream-NA-sb-traffic-StorageFirehoseEEA939E5-rDi6fvblOARo
+    ```
+    Firehose Outputs:
+    AmzStream-NA-sb-traffic.FirehoseSubscriberRoleInfraArn3358A9BC = arn:aws:iam::88xxxxxxxx:role/sb-traff-NA-subscriber
+    AmzStream-NA-sb-traffic.FirehoseSubscriptionRoleInfraArn22E3DAAD = arn:aws:iam::88xxxxxxxx:role/sb-traff-NA-subscription
+    AmzStream-NA-sb-traffic.StorageDeliveryStreamArnBB2306AC = arn:aws:firehose:us-east-1:88xxxxxxxx:deliverystream/AmzStream-NA-sb-traffic-StorageFirehoseEEA939E5-rDi6fvblOARo
     AmzStream-NA-sb-traffic.StorageLandingZoneBucketFE2101CB = arn:aws:s3:::amzstream-na-sb-traffic-storagelz10f6c360-4xbrfa1i3lxh
     Stack ARN:
-    arn:aws:cloudformation:us-east-1:886933864370:stack/AmzStream-NA-sb-traffic/e63f06f0-0790-11ef-b509-127247d88f9b
+    arn:aws:cloudformation:us-east-1:88xxxxxxxx:stack/AmzStream-NA-sb-traffic/e63f06f0-0790-11ef-b509-127247d88f9b
+    
 
     Note:
     *  This example uses `AmzStream-NA-sp-traffic` as an example.

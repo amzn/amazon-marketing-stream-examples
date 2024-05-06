@@ -28,10 +28,7 @@ def on_confirm_subscription(messages_batch, batch_failures, error_handler):
             topic_arn = confirmation_request["TopicArn"]
             subs_token = confirmation_request["Token"]
 
-            aws_clients.sns_client.confirm_subscription(
-                TopicArn=topic_arn,
-                Token=subs_token
-            )
+            aws_clients.sns_client.confirm_subscription(TopicArn=topic_arn, Token=subs_token)
             print(f"Confirmed: {body}")
         except Exception as error:
             batch_failures.append(message)
@@ -44,7 +41,7 @@ def on_entire_batch(all_messages, batch_failures):
         lambda x: True,
         on_confirm_subscription,
         batch_failures,
-        max_batch_size=10
+        max_batch_size=10,
     )
 
 
