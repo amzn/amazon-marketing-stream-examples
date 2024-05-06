@@ -2,7 +2,7 @@
 
 This project contains an example implementation and infrastructure code to both destinations SQS as well as firehose:
 
-1. Provisions necessary AWS infrastructure to receive and store Amazon Marketing Stream data, as well as confirm Stream dataset subscriptions for SQS. for Kinesis Data Firehose subscription confirmation is no longer required.
+1. Provisions necessary AWS infrastructure to receive and store Amazon Marketing Stream data, as well as confirm Stream dataset subscriptions for SQS. The Stream subscription process has been simplified now, with Kinesis Data Firehose, you no longer need to confirm your subscription.
 2. Subscribe to datasets and manage subscriptions using a CLI.
 
 ## Disclaimer
@@ -103,14 +103,15 @@ We recommend exploring the contents of this project and familiarizing yourself w
    
     **Manually create a virtualenv on MacOS and Linux**
    
+   Creating a virtual environment
     ```
-    $ python3 -m venv .venv
+    python3 -m venv .venv
     ```
 
     After the init process completes and the virtualenv is created, you can use the following step to activate your virtualenv.
 
     ```
-    $ source .venv/bin/activate
+    source .venv/bin/activate
     ```
 
     **Manually create a virtualenv on Windows**
@@ -122,37 +123,46 @@ We recommend exploring the contents of this project and familiarizing yourself w
 2. Install the required dependencies.
    
     ```
-    $ pip install -r requirements.txt
+    pip install -r requirements.txt
     ```
 
 3. Synthesize the CloudFormation templates for this code.
    
     ```
-    $ cdk synth
+    cdk synth
     ```
 
     To view the CloudFormation templates created by the synthesize step.
 
     ```
-    $ cdk ls
+    cdk ls
     ```
 
 4. Deploy CloudFormation templates.
    
-   Depending on your requirements, you can choose to deploy all CloudFormation templates or individual templates.
+   Depending on your requirements, you can choose to deploy all CloudFormation templates
    
+    SQS -
     ```
-    SQS - $ cdk deploy --all 
-    Firehose - $ cdk deploy --all --context delivery_type=firehose
+    cdk deploy --all 
     ```
-
-    or
-
+    
+    Firehose - 
     ```
-    SQS - $ cdk deploy AmzStream-NA-sp-traffic 
-    Firehose -  $ cdk deploy AmzStream-NA-sp-traffic --context delivery_type=firehose
+    cdk deploy --all --context delivery_type=firehose
     ```
 
+    or individual templates 
+
+    SQS -
+    ```
+    cdk deploy AmzStream-NA-sp-traffic 
+    ```
+    
+    Firehose - 
+    ```
+    cdk deploy AmzStream-NA-sp-traffic --context delivery_type=firehose
+    ```
     At the end of deployment, your output should resemble:  
 
     ```
@@ -170,6 +180,8 @@ We recommend exploring the contents of this project and familiarizing yourself w
     AmzStream-NA-sb-traffic.StorageLandingZoneBucketFE2101CB = arn:aws:s3:::amzstream-na-sb-traffic-storagelz10f6c360-4xbrfa1i3lxh
     Stack ARN:
     arn:aws:cloudformation:us-east-1:88xxxxxxxx:stack/AmzStream-NA-sb-traffic/e63f06f0-0790-11ef-b509-127247d88f9b
+
+    ```
     
 
     Note:
