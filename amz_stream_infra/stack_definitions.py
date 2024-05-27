@@ -186,12 +186,8 @@ class StreamLanding(DataSetScopedConstruct):
                 )
             ],
         )
-        CfnOutput(
-            self,
-            "DeliveryStreamArn",
-            value=self.firehose.delivery_stream_arn,
-            export_name="DeliveryStreamArn",
-        )
+
+        CfnOutput(self, "DeliveryStreamArn", value=self.firehose.delivery_stream_arn)
 
         self.sns_subscriptions_role = iam.Role(
             self, "SnsSubsRole", assumed_by=iam.ServicePrincipal("sns.amazonaws.com")
